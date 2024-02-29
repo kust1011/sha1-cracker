@@ -23,14 +23,14 @@ if len(sys.argv) > 3:
             hashOfSalt = sys.argv[4].lower()
     goalHash = sys.argv[1].lower()
     if salted and multiWord:
-        print "This hash can not be brute forced by this program because it is a salted combination of dictionary terms."
+        print("This hash can not be brute forced by this program because it is a salted combination of dictionary terms.")
     else:
         startTime = datetime.datetime.now()
         if not salted and not multiWord:
             #print("Solving unnsalted single word")
             for x in lines:
                 attemptCount += 1
-                if hashlib.sha1(x).hexdigest() == goalHash:
+                if hashlib.sha1(x.encode()).hexdigest() == goalHash:
                     print("Password is: " + x)
                     solved = True
                     break
@@ -38,15 +38,15 @@ if len(sys.argv) > 3:
             #print("Solving salted single word")
             for x in lines:
                 attemptCountSalt += 1
-                if hashlib.sha1(x).hexdigest() == hashOfSalt:
+                if hashlib.sha1(x.encode()).hexdigest() == hashOfSalt:
                     unhashedSalt = x
                     # print "Salt is: " + x
-                    print "Took " + str(attemptCountSalt) + " attempts to crack salt."
+                    print("Took " + str(attemptCountSalt) + " attempts to crack salt.")
                     break
             if unhashedSalt != "":
                 for x in lines:
                     attemptCount += 1
-                    if hashlib.sha1(unhashedSalt + x).hexdigest() == goalHash:
+                    if hashlib.sha1((unhashedSalt + x).encode()).hexdigest() == goalHash:
                         print("Password is: " + x)
                         solved = True
                         break
@@ -56,7 +56,7 @@ if len(sys.argv) > 3:
             for x in lines:
                 for y in lines:
                     attemptCount += 1
-                    if hashlib.sha1(x + " " + y).hexdigest() == goalHash:
+                    if hashlib.sha1((x + " " + y).encode()).hexdigest() == goalHash:
                         print("Password is " + x + " " + y)
                         solved = True
                         break
@@ -74,7 +74,7 @@ if len(sys.argv) > 3:
         if solved:
             print("Took " + str(attemptCount) + " attempts to crack input hash. Time Taken: " + str(datetime.datetime.now() - startTime))
         else:
-            print "Hash not resolvable with current dictionary and parameters."
+            print("Hash not resolvable with current dictionary and parameters.")
 else:
-    print "Please run the application with all necessary arguments. Example: python SHA1_Cracker_Basic.py ece4bb07f2580ed8b39aa52b7f7f918e43033ea1 non-combination salted f0744d60dd500c92c0d37c16174cc58d3c4bdd8e"
-    print "For more examples read the readme."
+    print("Please run the application with all necessary arguments. Example: python SHA1_Cracker_Basic.py ece4bb07f2580ed8b39aa52b7f7f918e43033ea1 non-combination salted f0744d60dd500c92c0d37c16174cc58d3c4bdd8e")
+    print("For more examples read the readme.")
